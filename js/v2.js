@@ -1,0 +1,151 @@
+(function () {
+  'use strict';
+  var raiz = document.documentElement;
+  var reduzir = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var economia = navigator.connection && navigator.connection.saveData;
+  var WHATS = 'https://wa.me/5522999724863?text=';
+  var pausado = false;
+
+  /* Corte: cada quadro entra por uma diagonal, o mesmo ângulo da logo. */
+  /* Observa o bloco, não o quadro: um elemento recortado não conta como visível. */
+  var cortes = document.querySelectorAll('.corte');
+  if ('IntersectionObserver' in window && !reduzir.matches) {
+    raiz.classList.add('com-corte');
+    var obsCorte = new IntersectionObserver(function (itens) {
+      itens.forEach(function (item) {
+        if (!item.isIntersecting) return;
+        item.target.querySelectorAll('.corte').forEach(function (c) { c.classList.add('visto'); });
+        obsCorte.unobserve(item.target);
+      });
+    }, { threshold: 0.08 });
+    cortes.forEach(function (c) { obsCorte.observe(c.parentElement); });
+  }
+
+  /* Quadros vivos: só carregam e tocam quando estão na tela. */
+  var videos = Array.prototype.slice.call(document.querySelectorAll('video[data-loop]'));
+  var movimentoLigado = !reduzir.matches && !economia;
+
+  function atualizar(v) {
+    if (!movimentoLigado) return;
+    if (v._naTela && !pausado && !document.hidden && v.offsetParent !== null) {
+      if (!v.getAttribute('src')) v.src = v.getAttribute('data-loop');
+      var p = v.play();
+      if (p && p.catch) p.catch(function () {});
+    } else {
+      v.pause();
+    }
+  }
+  if ('IntersectionObserver' in window) {
+    var obsVideo = new IntersectionObserver(function (itens) {
+      itens.forEach(function (item) { item.target._naTela = item.isIntersecting; atualizar(item.target); });
+    }, { rootMargin: '120px 0px' });
+    videos.forEach(function (v) { obsVideo.observe(v); });
+  }
+  document.addEventListener('visibilitychange', function () { videos.forEach(atualizar); });
+
+  var botaoPausa = document.getElementById('pausa');
+  if (botaoPausa && !movimentoLigado) { botaoPausa.hidden = true; raiz.classList.add('parado'); }
+  if (botaoPausa) botaoPausa.addEventListener('click', function () {
+    pausado = !pausado;
+    raiz.classList.toggle('parado', pausado);
+    botaoPausa.setAttribute('aria-pressed', String(pausado));
+    botaoPausa.setAttribute('aria-label', pausado ? 'Retomar os movimentos da página' : 'Pausar os movimentos da página');
+    botaoPausa.querySelector('use').setAttribute('href', pausado ? '#i-play' : '#i-pause');
+    videos.forEach(atualizar);
+  });
+
+  /* Sala de projeção: o player só entra na página depois do clique. */
+  var sala = document.getElementById('sala');
+  var palco = document.getElementById('palco');
+  var salaTitulo = document.getElementById('sala-titulo');
+  var salaExterno = document.getElementById('sala-externo');
+  var salaWhats = document.getElementById('sala-whats');
+
+  function mensagem(titulo) {
+    return WHATS + encodeURIComponent('Olá, NorthLab. Assisti ao trabalho ' + titulo + ' e quero conversar sobre a narrativa da minha marca.');
+  }
+
+  function aviso(texto) {
+    palco.textContent = '';
+    var p = document.createElement('p');
+    p.className = 'palco-erro';
+    p.textContent = texto;
+    palco.appendChild(p);
+  }
+
+  function abrir(gatilho) {
+    var ref = gatilho.getAttribute('data-video');
+    var corte = ref.indexOf(':');
+    var tipo = ref.slice(0, corte), id = ref.slice(corte + 1);
+    var titulo = gatilho.getAttribute('data-titulo');
+
+    salaTitulo.textContent = titulo;
+    salaWhats.href = mensagem(titulo);
+    palco.className = 'palco' + (gatilho.hasAttribute('data-retrato') ? ' palco-retrato' : '');
+    palco.textContent = '';
+    salaExterno.hidden = tipo === 'arquivo';
+
+    if (tipo === 'arquivo') {
+      var v = document.createElement('video');
+      v.src = id;
+      v.controls = true;
+      v.autoplay = true;
+      v.playsInline = true;
+      v.poster = gatilho.getAttribute('data-poster') || '';
+      v.addEventListener('error', function () {
+        aviso('O vídeo não carregou. Verifique sua conexão e tente de novo.');
+      });
+      palco.appendChild(v);
+    } else {
+      var f = document.createElement('iframe');
+      f.title = 'Player de vídeo: ' + titulo;
+      f.allow = 'autoplay; fullscreen; picture-in-picture';
+      f.allowFullscreen = true;
+      f.referrerPolicy = 'strict-origin-when-cross-origin';
+      if (tipo === 'vimeo') {
+        f.src = 'https://player.vimeo.com/video/' + id + '?autoplay=1&title=0&byline=0&portrait=0&dnt=1&color=FF6B35';
+        salaExterno.textContent = 'Abrir no Vimeo';
+      } else {
+        f.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0&playsinline=1';
+        salaExterno.textContent = 'Abrir no YouTube';
+      }
+      salaExterno.href = gatilho.href;
+      /* O YouTube recusa o player quando a página é aberta direto do disco (erro 153). */
+      if (tipo === 'youtube' && location.protocol === 'file:') {
+        aviso('Aberto direto do computador, o YouTube não exibe o player. Use o link Abrir no YouTube.');
+      } else {
+        palco.appendChild(f);
+      }
+    }
+    sala.showModal();
+  }
+
+  document.addEventListener('click', function (e) {
+    var gatilho = e.target.closest ? e.target.closest('[data-video]') : null;
+    if (!gatilho || !sala || !sala.showModal) return;
+    e.preventDefault();
+    abrir(gatilho);
+  });
+
+  if (sala) {
+    document.getElementById('sala-fechar').addEventListener('click', function () { sala.close(); });
+    sala.addEventListener('click', function (e) {
+      if (e.target === sala || e.target.id === 'sala-meio') sala.close();
+    });
+    sala.addEventListener('close', function () { palco.textContent = ''; });
+  }
+
+  /* No celular, a barra sai de cena enquanto o botão final, igual a ela, está à vista. */
+  var barra = document.querySelector('.whats');
+  var botaoFinal = document.querySelector('.chamada .botao-final');
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (itens) {
+      barra.classList.toggle('oculta', itens[0].isIntersecting);
+    }).observe(botaoFinal);
+  }
+
+  var topo = document.getElementById('topo');
+  function aoRolar() { topo.classList.toggle('solido', window.scrollY > 40); }
+  aoRolar();
+  window.addEventListener('scroll', aoRolar, { passive: true });
+})();

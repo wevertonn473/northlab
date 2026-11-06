@@ -23,7 +23,8 @@
 
   /* Quadros vivos: só carregam e tocam quando estão na tela. */
   var videos = Array.prototype.slice.call(document.querySelectorAll('video[data-loop]'));
-  var movimentoLigado = !reduzir.matches && !economia;
+  /* Os quadros são curtos, mudos e têm botão de pausa, então tocam mesmo com "reduzir movimento". Só a economia de dados desliga. */
+  var movimentoLigado = !economia;
 
   function atualizar(v) {
     if (!movimentoLigado) return;
@@ -38,7 +39,7 @@
   if ('IntersectionObserver' in window) {
     var obsVideo = new IntersectionObserver(function (itens) {
       itens.forEach(function (item) { item.target._naTela = item.isIntersecting; atualizar(item.target); });
-    }, { rootMargin: '120px 0px' });
+    }, { rootMargin: '600px 0px' });
     videos.forEach(function (v) { obsVideo.observe(v); });
   }
   document.addEventListener('visibilitychange', function () { videos.forEach(atualizar); });

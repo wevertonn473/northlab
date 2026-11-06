@@ -93,6 +93,7 @@ h2, .contorno, .faixa { font-weight: 900; line-height: .9; letter-spacing: -.005
 .foto-cena img { width: 100%; height: 100%; object-fit: cover; object-position: 52% 40%; }
 .foto-cena::after { content: ""; position: absolute; inset: 45% 0 0; background: linear-gradient(transparent, rgba(10, 10, 10, .7)); }
 .foto-cena h2 { position: absolute; z-index: 1; left: var(--margem); right: var(--margem); bottom: 18px; font-size: 25vw; line-height: .85; text-align: center; }
+.foto-cena h2 img { display: block; width: min(64vw, 420px); height: auto; margin: 0 auto; }
 .foto-sorriso { padding: 12px var(--margem) 64px; }
 .foto-sorriso .foto-par { margin-top: 0; }
 .foto-claro-2 .vertical { font-family: var(--display); font-weight: 900; line-height: .9; text-transform: uppercase; font-size: 21vw; }
@@ -118,7 +119,7 @@ figcaption { margin-top: 12px; font-weight: 600; font-size: 17px; letter-spacing
 .cena h2 { position: absolute; left: var(--margem); bottom: 38px; font-size: 17vw; }
 .cena .assistir { left: var(--margem); }
 .quadros-3, .quadros-jesus { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--vao); padding: var(--vao) var(--margem) 64px; }
-.quadros-3 img, .quadros-3 video, .quadros-jesus img { width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; }
+.quadros-3 img, .quadros-jesus img { width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; }
 
 /* Faraó */
 .farao { position: relative; display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 12px; padding: 40px var(--margem) 56px; }
@@ -153,7 +154,8 @@ figcaption { margin-top: 12px; font-weight: 600; font-size: 17px; letter-spacing
 .faixa i { flex: none; width: .3em; height: .78em; margin: 0 .24em; background: var(--laranja); clip-path: polygon(62% 0, 100% 0, 38% 100%, 0 100%); }
 @keyframes correr { to { transform: translateX(-50%); } }
 .parado .faixa-trilho { animation-play-state: paused; }
-.quadros-jesus img { aspect-ratio: 9 / 16; }
+.quadros-jesus { grid-template-columns: 1fr; }
+.quadros-jesus img { aspect-ratio: 16 / 9; }
 
 /* Entregas */
 .entregas { padding: 64px var(--margem); }
@@ -275,8 +277,8 @@ figcaption { margin-top: 12px; font-weight: 600; font-size: 17px; letter-spacing
   .jabson-filme img { height: 100%; }
   .faixa { font-size: 13vw; }
   .jesus { padding-top: 80px; }
-  .quadros-jesus { padding: 20px var(--margem) 96px; }
-  .quadros-jesus img { aspect-ratio: 4 / 5; }
+  .quadros-jesus { grid-template-columns: repeat(3, 1fr); padding: 20px var(--margem) 96px; }
+  .quadros-jesus img { aspect-ratio: 1 / 1; }
   .entregas { display: grid; grid-template-columns: 7fr 5fr; column-gap: 48px; padding: 96px var(--margem); }
   .entregas h2 { font-size: 10.4vw; grid-row: span 2; }
   .entregas dl { margin-top: 0; align-self: start; }

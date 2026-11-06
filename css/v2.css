@@ -62,6 +62,7 @@ h2, .contorno, .faixa { font-weight: 900; line-height: .9; letter-spacing: -.005
 .logo-herdy img { height: clamp(92px, 10.6vw, 164px); }
 .logo-thalles img { height: clamp(40px, 4.8vw, 74px); }
 .logo-pocah img { height: clamp(30px, 3.6vw, 56px); }
+.logo-sorriso img { height: clamp(56px, 6.4vw, 100px); }
 .moldura::before, .moldura::after { content: ""; position: absolute; width: 46%; height: 62%; border: 1px solid var(--offwhite); pointer-events: none; }
 .moldura::before { top: 0; left: 0; border-right: 0; border-bottom: 0; }
 .moldura::after { right: 0; bottom: 0; border-left: 0; border-top: 0; }
@@ -109,11 +110,11 @@ figcaption { margin-top: 12px; font-weight: 600; font-size: 17px; letter-spacing
 
 /* Aftermovie */
 .cena { position: relative; display: block; }
-.cena img { width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; }
+.cena img, .cena video { width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; }
 .cena h2 { position: absolute; left: var(--margem); bottom: 38px; font-size: 17vw; }
 .cena .assistir { left: var(--margem); }
 .quadros-3, .quadros-jesus { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--vao); padding: var(--vao) var(--margem) 64px; }
-.quadros-3 img, .quadros-jesus img { width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; }
+.quadros-3 img, .quadros-3 video, .quadros-jesus img { width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; }
 
 /* Faraó */
 .farao { position: relative; display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 12px; padding: 40px var(--margem) 56px; }
@@ -137,7 +138,7 @@ figcaption { margin-top: 12px; font-weight: 600; font-size: 17px; letter-spacing
 .jabson h2 { font-size: 26vw; }
 .jabson p { margin-top: 12px; }
 .jabson-filme { position: relative; display: block; }
-.jabson-filme img { width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; }
+.jabson-filme img, .jabson-filme video { width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; }
 
 /* Faixa */
 .jesus { padding-top: 56px; }
@@ -265,7 +266,7 @@ figcaption { margin-top: 12px; font-weight: 600; font-size: 17px; letter-spacing
   .jabson { grid-template-columns: 5fr 7fr; align-items: stretch; }
   .jabson-texto { padding: 72px var(--margem); display: flex; flex-direction: column; justify-content: flex-end; }
   .jabson h2 { font-size: 13vw; }
-  .jabson-filme img { height: 100%; }
+  .jabson-filme img, .jabson-filme video { height: 100%; }
   .faixa { font-size: 13vw; }
   .jesus { padding-top: 80px; }
   .quadros-jesus { padding: 20px var(--margem) 96px; }

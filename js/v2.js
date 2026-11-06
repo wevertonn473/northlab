@@ -149,4 +149,16 @@
   function aoRolar() { topo.classList.toggle('solido', window.scrollY > 40); }
   aoRolar();
   window.addEventListener('scroll', aoRolar, { passive: true });
+
+  /* Antes e depois */
+  document.querySelectorAll('.compara').forEach(function (c) {
+    var faixa = c.querySelector('input'), arrastando = false;
+    function ajustar(v) { v = Math.max(0, Math.min(100, v)); faixa.value = v; c.style.setProperty('--p', v + '%'); }
+    function mover(e) { var r = c.getBoundingClientRect(); ajustar((e.clientX - r.left) / r.width * 100); }
+    c.addEventListener('pointerdown', function (e) { arrastando = true; c.setPointerCapture(e.pointerId); mover(e); });
+    c.addEventListener('pointermove', function (e) { if (arrastando) mover(e); });
+    c.addEventListener('pointerup', function () { arrastando = false; });
+    c.addEventListener('pointercancel', function () { arrastando = false; });
+    faixa.addEventListener('input', function () { ajustar(+faixa.value); });
+  });
 })();

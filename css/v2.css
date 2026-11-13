@@ -315,11 +315,67 @@ figcaption { margin-top: 12px; font-weight: 600; font-size: 17px; letter-spacing
   .chamada .botao-final { width: auto; }
   .sala-base .botao-final { flex: none; padding: 0 20px; font-size: 20px; }
 }
+/* A faixa corre sempre, como os loops (pedido do cliente); só a economia de dados para. */
 @media (prefers-reduced-motion: reduce) {
-  .faixa-trilho { animation: none; }
   html { scroll-behavior: auto; }
 }
 
 /* "Assistir" precisa ler sobre qualquer quadro, inclusive os claros. */
 .quadro::after, .jabson-filme::after, .cena::after { content: ""; position: absolute; inset: auto 0 0; height: 72px; background: linear-gradient(to top, rgba(10, 10, 10, .62), rgba(10, 10, 10, 0)); pointer-events: none; }
 .assistir { z-index: 1; }
+
+/* Computador: tudo cresce pela largura E pela altura da tela, para cada bloco caber inteiro.
+   --vw é "1% da tela útil": nunca maior que 1,6% da altura. Em monitor largo o conteúdo vira uma coluna central. */
+@media (min-width: 900px) {
+  :root {
+    --vw: min(1vw, 1.6vh);
+    --tela: calc(var(--vw) * 100);
+    --margem: max(32px, calc((100vw - var(--tela)) / 2 + 32px));
+    --altura: calc(100vh - 72px);
+  }
+  .moldura { --u: clamp(.74px, .54px + .05 * var(--vw), 1.2px); }
+
+  /* Títulos que antes seguiam só a largura */
+  .cena h2 { font-size: calc(var(--vw) * 12); bottom: 40px; }
+  .vertical { font-size: min(calc(var(--vw) * 11), calc((var(--altura) - 152px) / 5.4)); }
+  .contorno, .cheio { font-size: calc(var(--vw) * 8.4); }
+  .jabson h2 { font-size: calc(var(--vw) * 10); }
+  .faixa { font-size: calc(var(--vw) * 7.5); }
+  .entregas h2 { font-size: calc(var(--vw) * 8.4); }
+  .chamada h2 { font-size: calc(var(--vw) * 9); }
+
+  /* Destaques: os três quadros em pé cabem na altura */
+  .trio { grid-template-columns: repeat(3, minmax(0, calc((var(--altura) - 140px) * 9 / 16))); justify-content: center; }
+
+  /* Aftermovie: imagem + três quadros ocupam exatamente uma tela */
+  .palco-show { display: grid; grid-template-rows: minmax(0, 1fr) auto; height: var(--altura); min-height: 560px; margin-bottom: 96px; }
+  .cena { min-height: 0; }
+  .cena img { height: 100%; aspect-ratio: auto; }
+  .quadros-3 { padding-top: var(--vao); padding-bottom: 0; }
+  .quadros-3 img { aspect-ratio: 16 / 9; }
+
+  /* Faraó: quadros limitados pela altura */
+  .quadros-farao { grid-template-columns: repeat(3, minmax(0, calc((var(--altura) - 152px) * 9 / 16))); justify-content: start; }
+
+  /* Herdy: título vazado + dois quadros + título cheio cabem numa tela */
+  .herdy { padding: 48px 0 96px; }
+  .herdy .fala { padding: 32px 32px 0; }
+  .trio-herdy { grid-template-columns: repeat(2, minmax(0, calc((var(--altura) - 48px - var(--vw) * 15.2 - 40px) * 9 / 16))); padding: 20px var(--margem); }
+
+  /* Color grading: as três do Jesus in Concert do mesmo porte que o antes e depois e o Luz de verão */
+  .jesus { padding-top: 48px; }
+  .quadros-jesus { padding: 16px var(--margem) 24px; }
+  .quadros-jesus img { aspect-ratio: 2 / 1; }
+  .cor-extra { max-width: none; margin: 0; padding: 0 var(--margem) 96px; }
+
+  /* Fotografia: cada foto em pé (2:3) cabe na altura da tela; títulos na mesma régua */
+  .foto-abertura h1 { font-size: calc(var(--vw) * 19.5); }
+  .foto-pocah h2 { font-size: calc(var(--vw) * 20); }
+  .foto-par { max-width: calc((var(--altura) - 48px) * 2 / 3 * 12 / 7 + 24px); margin-left: auto; margin-right: auto; }
+  .foto-par figure:nth-child(2), .foto-par.inverso figure:nth-child(1) { margin-top: calc((var(--altura) - 48px) * 2 / 7); }
+  .foto-par.inverso figure:nth-child(2) { margin-top: 0; }
+  .foto-claro { grid-template-columns: auto minmax(0, calc((var(--altura) - 80px) * 2 / 3)); }
+  .foto-claro .vertical { font-size: min(calc(var(--vw) * 13), calc((var(--altura) - 80px) / 3.4)); }
+  .foto-claro-2 { grid-template-columns: auto minmax(0, calc((var(--altura) - 80px) * 4 / 3 + 24px)); }
+  .foto-claro-2 .vertical { font-size: min(calc(var(--vw) * 10), calc((var(--altura) - 80px) / 6.6)); }
+}

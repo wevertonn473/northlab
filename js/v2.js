@@ -83,14 +83,21 @@
     salaWhats.href = mensagem(titulo);
     palco.className = 'palco' + (gatilho.hasAttribute('data-retrato') ? ' palco-retrato' : '');
     palco.textContent = '';
-    salaExterno.hidden = tipo === 'arquivo';
+    salaExterno.hidden = tipo === 'arquivo' || tipo === 'imagem';
 
-    if (tipo === 'arquivo') {
+    if (tipo === 'imagem') {
+      var im = document.createElement('img');
+      im.src = id;
+      im.alt = gatilho.getAttribute('aria-label') ? gatilho.getAttribute('aria-label').replace(/^Ampliar: /, '') : titulo;
+      im.addEventListener('error', function () { aviso('A imagem não carregou. Verifique sua conexão e tente de novo.'); });
+      palco.appendChild(im);
+    } else if (tipo === 'arquivo') {
       var v = document.createElement('video');
       v.src = id;
       v.controls = true;
       v.autoplay = true;
       v.playsInline = true;
+      v.loop = gatilho.hasAttribute('data-repetir');
       v.poster = gatilho.getAttribute('data-poster') || '';
       v.addEventListener('error', function () {
         aviso('O vídeo não carregou. Verifique sua conexão e tente de novo.');

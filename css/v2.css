@@ -368,14 +368,19 @@ figcaption { margin-top: 12px; font-weight: 600; font-size: 17px; letter-spacing
   .quadros-jesus img { aspect-ratio: 2 / 1; }
   .cor-extra { max-width: none; margin: 0; padding: 0 var(--margem) 96px; }
 
-  /* Fotografia: cada foto em pé (2:3) cabe na altura da tela; títulos na mesma régua */
+  /* Fotografia: mesma régua do Filmes; cada bloco (título + fotos + legendas) cabe numa tela */
+  .foto-abertura { height: 88vh; height: 88svh; }
   .foto-abertura h1 { font-size: calc(var(--vw) * 19.5); }
-  .foto-pocah h2 { font-size: calc(var(--vw) * 20); }
-  .foto-par { max-width: calc((var(--altura) - 48px) * 2 / 3 * 12 / 7 + 24px); margin-left: auto; margin-right: auto; }
-  .foto-par figure:nth-child(2), .foto-par.inverso figure:nth-child(1) { margin-top: calc((var(--altura) - 48px) * 2 / 7); }
+  .foto-cena { height: var(--altura); min-height: 520px; }
+  .foto-pocah { --foto-h: calc(var(--altura) - 56px - 24px - 40px - 56px - var(--vw) * 10.8); padding: 56px var(--margem); }
+  .foto-pocah h2 { font-size: calc(var(--vw) * 12); }
+  .foto-pocah .foto-par { margin-top: 24px; }
+  .foto-sorriso { --foto-h: calc(var(--altura) - 56px - 40px - 56px); padding: 56px var(--margem); }
+  .foto-par { max-width: calc(var(--foto-h) * 2 / 3 * 12 / 7 + 24px); margin-left: auto; margin-right: auto; }
+  .foto-par figure:nth-child(2), .foto-par.inverso figure:nth-child(1) { margin-top: calc(var(--foto-h) * 2 / 7); }
   .foto-par.inverso figure:nth-child(2) { margin-top: 0; }
-  .foto-claro { grid-template-columns: auto minmax(0, calc((var(--altura) - 80px) * 2 / 3)); }
-  .foto-claro .vertical { font-size: min(calc(var(--vw) * 13), calc((var(--altura) - 80px) / 3.4)); }
-  .foto-claro-2 { grid-template-columns: auto minmax(0, calc((var(--altura) - 80px) * 4 / 3 + 24px)); }
-  .foto-claro-2 .vertical { font-size: min(calc(var(--vw) * 10), calc((var(--altura) - 80px) / 6.6)); }
+  .foto-claro { padding: 56px var(--margem); grid-template-columns: auto minmax(0, calc((var(--altura) - 112px) * 2 / 3)); }
+  .foto-claro .vertical { font-size: min(calc(var(--vw) * 13), calc((var(--altura) - 112px) / 3.4)); }
+  .foto-claro-2 { grid-template-columns: auto minmax(0, calc((var(--altura) - 112px) * 4 / 3 + 24px)); }
+  .foto-claro-2 .vertical { font-size: min(calc(var(--vw) * 10), calc((var(--altura) - 112px) / 6.6)); }
 }

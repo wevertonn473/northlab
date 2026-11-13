@@ -34,10 +34,6 @@ h2, .contorno, .faixa { font-weight: 900; line-height: .9; letter-spacing: -.005
 .topo.solido { background: var(--preto); }
 .topo-marca { margin-right: auto; display: flex; align-items: center; min-height: 44px; }
 .topo-marca img { width: 42px; height: auto; }
-.pausa { width: 44px; height: 44px; display: grid; place-items: center; }
-.pausa svg { width: 14px; height: 14px; }
-.pausa[hidden] { display: none; }
-.pausa:hover { color: var(--laranja); }
 .whats { position: fixed; inset: auto 0 0; height: calc(var(--barra) + var(--seguro)); padding-bottom: var(--seguro); display: flex; align-items: center; justify-content: center; gap: 10px; background: var(--laranja); color: var(--preto); font-weight: 600; font-size: 20px; letter-spacing: .02em; }
 .whats svg, .botao-final svg { width: 22px; height: 22px; flex: none; }
 .whats.oculta { visibility: hidden; }
@@ -132,7 +128,7 @@ figcaption { margin-top: 12px; font-weight: 600; font-size: 17px; letter-spacing
 .herdy { padding: 44px 0 64px; overflow: hidden; }
 .contorno, .cheio { font-size: 12.3vw; white-space: nowrap; text-align: center; }
 .contorno { color: transparent; -webkit-text-stroke: 1px var(--offwhite); }
-.trio-herdy { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--vao); padding: 14px var(--margem); }
+.trio-herdy { display: grid; grid-template-columns: repeat(2, calc((100% - var(--vao) * 2) / 3)); justify-content: center; gap: var(--vao); padding: 14px var(--margem); }
 .fala { padding: 32px var(--margem) 0; max-width: 62ch; margin: 0 auto; }
 .fala blockquote { font-size: 20px; line-height: 1.4; }
 .fala figcaption { text-align: left; margin-top: 14px; }

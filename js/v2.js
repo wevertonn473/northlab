@@ -23,7 +23,7 @@
 
   /* Quadros vivos: só carregam e tocam quando estão na tela. */
   var videos = Array.prototype.slice.call(document.querySelectorAll('video[data-loop]'));
-  /* Os quadros são curtos, mudos e têm botão de pausa, então tocam mesmo com "reduzir movimento". Só a economia de dados desliga. */
+  /* Os quadros são curtos e mudos, então tocam sempre, mesmo com "reduzir movimento". Só a economia de dados desliga. */
   var movimentoLigado = !economia;
 
   function atualizar(v) {
@@ -44,16 +44,7 @@
   }
   document.addEventListener('visibilitychange', function () { videos.forEach(atualizar); });
 
-  var botaoPausa = document.getElementById('pausa');
-  if (botaoPausa && !movimentoLigado) { botaoPausa.hidden = true; raiz.classList.add('parado'); }
-  if (botaoPausa) botaoPausa.addEventListener('click', function () {
-    pausado = !pausado;
-    raiz.classList.toggle('parado', pausado);
-    botaoPausa.setAttribute('aria-pressed', String(pausado));
-    botaoPausa.setAttribute('aria-label', pausado ? 'Retomar os movimentos da página' : 'Pausar os movimentos da página');
-    botaoPausa.querySelector('use').setAttribute('href', pausado ? '#i-play' : '#i-pause');
-    videos.forEach(atualizar);
-  });
+  if (!movimentoLigado) raiz.classList.add('parado');
 
   /* Sala de projeção: o player só entra na página depois do clique. */
   var sala = document.getElementById('sala');
